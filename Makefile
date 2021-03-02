@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: LGPL-3.0-or-later
 # Copyright (C) 2020 Daniel Thompson
 
-BOARD ?= pinetime
+BOARD ?= p8
 CROSS_COMPILE := arm-none-eabi-
 
 CC = $(CROSS_COMPILE)gcc
@@ -42,6 +42,10 @@ $(OBJDIR)/reloader.hex: $(OBJDIR)/reloader.elf
 
 $(OBJDIR)/reloader.zip : $(OBJDIR)/reloader.hex
 	python3 -m nordicsemi dfu genpkg --dev-type 0x0052 --application $< $@
+
+ifeq ($(BOARD),p8)
+all : $(OBJDIR)/reloader-mcuboot.zip
+endif
 
 ifeq ($(BOARD),pinetime)
 all : $(OBJDIR)/reloader-mcuboot.zip $(OBJDIR)/reloader-factory.zip
